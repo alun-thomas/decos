@@ -37,9 +37,10 @@ public class DecoGraph<V> extends Network<V,Object>
 		}
 	}
 
-	public Graph getAuxiliaryGraph()
+	public Graph<Set<V>,Set<V>> getAuxiliaryGraph()
 	{
-		return aux == null ? this : aux.getGraph();
+		//return aux == null ? this : aux.getGraph();
+		return aux == null ? null : aux.getGraph();
 	}
 
 	public Set<V> commonNeighbours(V x, V y)

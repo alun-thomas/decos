@@ -16,14 +16,14 @@ abstract public class Auxiliary<V>
 
 	public Auxiliary(boolean directed)
 	{
-		net = new Network(directed);
+		net = new Network<Set<V>,Set<V>>(directed);
 		map = new LinkedHashMap<V,Set<V>>();
 	}
 	
 	abstract public boolean connect(V x, V y, Set<V> S);
 	abstract public boolean disconnect(V x, V y, Set<V> C);
 
-	public Graph getGraph()
+	public Graph<Set<V>,Set<V>> getGraph()
 	{
 		return net;
 	}

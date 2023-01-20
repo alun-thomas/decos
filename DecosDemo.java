@@ -76,7 +76,7 @@ public class DecosDemo
 
 			RandomSet<Integer> bag = makeBag(n,rand);
 
-			WSMGraphLaw<Integer> law = new ProductGraphLaw(new MaxCliquePrior(max),new EdgePenaltyPrior(alpha));
+			WSMGraphLaw<Integer> law = new ProductGraphLaw<Integer>(new MaxCliquePrior<Integer>(max),new EdgePenaltyPrior<Integer>(alpha));
 
 
 		/* If a graph representation is specified, run the sampler using that, output results, and quit. */
@@ -123,22 +123,25 @@ public class DecosDemo
 
 			DecoGraph<Integer> g = new DecoGraph<Integer>(bag,0);
 			Parameter pause = new Parameter("Wait",0,1000,1000);
-			GraphFrame fg = new GraphFrame(g.getAuxiliaryGraph(),asArray(pause));
+			//GraphFrame fg = new GraphFrame(g.getAuxiliaryGraph(),asArray(pause));
+			GraphFrame<Integer,Object> fg = new GraphFrame<Integer,Object>(g,asArray(pause));
 			fg.setTitle("Decompsable Graph");
 			resize(fg,800,500);
 
 			DecoGraph<Integer> jt = new DecoGraph<Integer>(bag,1);
-			GraphFrame fjt = new GraphFrame(jt.getAuxiliaryGraph());
+			GraphFrame<Set<Integer>,Set<Integer>> fjt = new GraphFrame<Set<Integer>,Set<Integer>>(jt.getAuxiliaryGraph());
 			fjt.setTitle("Junction Tree");
 			resize(fjt,800,500);
 
 			DecoGraph<Integer> at = new DecoGraph<Integer>(bag,2);
-			GraphFrame fat = new GraphFrame(at.getAuxiliaryGraph(),new DAGLocator());
+			GraphFrame<Set<Integer>,Set<Integer>> fat = new GraphFrame<Set<Integer>,Set<Integer>>(at.getAuxiliaryGraph(),
+				new DAGLocator<Set<Integer>,Set<Integer>>());
 			fat.setTitle("Almond Tree");
 			resize(fat,800,500);
 
 			DecoGraph<Integer> ig = new DecoGraph<Integer>(bag,3);
-			GraphFrame fig = new GraphFrame(ig.getAuxiliaryGraph(),new DAGLocator());
+			GraphFrame<Set<Integer>,Set<Integer>> fig = new GraphFrame<Set<Integer>,Set<Integer>>(ig.getAuxiliaryGraph(),
+				new DAGLocator<Set<Integer>,Set<Integer>>());
 			fig.setTitle("Ibarra Graph");
 			resize(fig,800,500);
 
@@ -210,7 +213,7 @@ public class DecosDemo
 	}
 
 
-	public static double logAcceptanceConnect(Graph<Integer,Object> g, WSMGraphLaw law, int x, int y)
+	public static double logAcceptanceConnect(Graph<Integer,Object> g, WSMGraphLaw<Integer> law, int x, int y)
 	{
 		Set<Integer> s = new LinkedHashSet<Integer>(g.getNeighbours(x));
 		s.retainAll(g.getNeighbours(y));
