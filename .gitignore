@@ -1,3 +1,8 @@
+GNUmakefile
+META-INF
+.RData
+.Rhistory
+
 # Compiled class file
 *.class
 
