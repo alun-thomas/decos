@@ -15,6 +15,9 @@ COBJS = $(MAINS:%.java=%.class)
 
 all	: $(COBJS) $(OBJS) 
 
+get:
+	cp /home/alun/src/java/jpsgcs/DecosDemo.java .
+
 getall:
 	jar -xvf /home/alun/src/java/packaging/decos.jar 
 

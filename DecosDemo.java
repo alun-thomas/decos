@@ -112,8 +112,12 @@ public class DecosDemo
 					report(!terse && i % interval == 0,i+"\t"+nedge+"\n");
 				}
 
-				report(terse,opt+"\t"+its+"\t"+nedge+"\t"+m.time()+"\n");
 				report(!terse,"Iterations = "+its+"\t number of edges = "+nedge+"\nTime = "+m.time()+"\n");
+
+				if (terse)
+				{
+					System.out.print(opt+"\t"+its+"\t\t"+n+" "+nedge+"\t"+m.time()+"\n");
+				}
 
 				System.exit(0);
 			}
