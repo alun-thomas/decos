@@ -163,16 +163,15 @@ public class IbarraGraph<V> extends Auxiliary<V>
 			return false;
 
 		LinkedList<Set<V>> q = new LinkedList<Set<V>>();
-		q.add(decs.iterator().next());
 
-		for (Set<V> C = q.poll(); C != null; C = q.poll())
+		for (Set<V> C = decs.iterator().next(); C != null; C = q.poll())
 		{
 			decs.remove(C);
 			for (Set<V> neib : net.outNeighbours(C))
-				if (decs.contains(neib))
+				if (decs.contains(neib) && !q.contains(neib))
 					q.add(neib);
 			for (Set<V> neib : net.inNeighbours(C))
-				if (decs.contains(neib))
+				if (decs.contains(neib) && !q.contains(neib))
 					q.add(neib);
 		}
 

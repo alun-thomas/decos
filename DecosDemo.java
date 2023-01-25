@@ -85,10 +85,21 @@ public class DecosDemo
 			{
 				DecoGraph<Integer> g = new DecoGraph<Integer>(bag,opt);
 
+				Set<Integer> empty = new LinkedHashSet<Integer>();
+				double logprob = law.logPotential(empty,true);
+				for (Integer i : g.getVertices())
+				{
+					logprob += law.logPotential(new LinkedHashSet<Integer>(i),true);
+					logprob -= law.logPotential(empty,true);
+				}
+
 				int nedge = 0;
 				double logacceptance = 0;
 				Integer x = null;
 				Integer y = null;
+
+				int like = 0;
+				int accept = 0;
 
 				for (int i=1; i<=its; i++)
 				{
@@ -100,24 +111,42 @@ public class DecosDemo
 	
 					if (g.connects(x,y))
 					{
-						if (Math.log(rand.nextDouble()) < -logacceptance && g.disconnect(x,y))
-							nedge--;
+						if (Math.log(rand.nextDouble()) < -logacceptance)
+						{
+							like++;
+							if (g.disconnect(x,y))
+							{
+								accept++;
+								nedge--;
+								logprob -= logacceptance;
+							}
+						}
 					}
 					else
 					{
-						if (Math.log(rand.nextDouble()) < logacceptance && g.connect(x,y))
-							nedge++;
+						if (Math.log(rand.nextDouble()) < logacceptance)
+						{
+							like++;
+							if (g.connect(x,y))
+							{
+								accept++;
+								nedge++;
+								logprob += logacceptance;
+							}
+						}
 					}
 	
-					report(!terse && i % interval == 0,i+"\t"+nedge+"\n");
+					output(!terse && i % interval == 0,i+"\t"+n+"\t"+nedge+"\t"+logprob+"\t"+accept+"\t"+like+"\n");
 				}
 
-				report(!terse,"Iterations = "+its+"\t number of edges = "+nedge+"\nTime = "+m.time()+"\n");
+				report(!terse,"Iterations = "+its
+					+"\nNumber of vertices = "+n
+					+"\nNumber of edges = "+nedge
+					+"\nLog probability = "+logprob
+					+"\nAcceptances = "+accept+"/"+like+" = "+(accept/(double)like)
+					+"\nTime = "+m.time()+"\n");
 
-				if (terse)
-				{
-					System.out.print(opt+"\t"+its+"\t\t"+n+" "+nedge+"\t"+m.time()+"\n");
-				}
+				output(terse,opt+"\t"+its+"\t"+n+"\t"+nedge+"\t"+logprob+"\t"+accept+"\t"+like+"\t"+(accept/(double)like)+"\t"+m.time()+"\n");
 
 				System.exit(0);
 			}
@@ -237,6 +266,12 @@ public class DecosDemo
 	{
 		if (doit)
 			System.err.print(s);
+	}
+
+	public static void output(boolean doit, String s)
+	{
+		if (doit)
+			System.out.print(s);
 	}
 
 	public static void resize(GraphFrame f, int w, int h)
